@@ -22,14 +22,14 @@ $ pig -x local -f pregunta.pig
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
 
-ds = LOAD 'data.csv' USING PigStorage(',')
-        AS(col1:INT,
-           col2:charArray,
-           col3:charArray,
-           col4:charArray,
-           col5:charArray,
-           col6:INT);
-
-ds = FOREACH ds GENERATE col5;
-ds= FILTER ds BY SUBSTRING(col5,0,1) MATCHES '[b]';
-STORE ds INTO 'output' USING PigStorage(',');
+data = LOAD 'data.csv' USING PigStorage(',') AS (
+    Id:int,
+    Name:chararray,
+    LastName:chararray,
+    Birth:chararray,
+    Color:chararray,
+    Value:int
+);
+color_table = FOREACH data GENERATE Color;
+variable = FILTER color_table BY Color MATCHES 'b.*';
+STORE variable INTO 'output' USING PigStorage(',');
