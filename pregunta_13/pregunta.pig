@@ -21,15 +21,11 @@ $ pig -x local -f pregunta.pig
 
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
+fs -rm -f -r output;
+u = LOAD 'data.csv' USING PigStorage(',') 
+    AS (color:CHARARRAY);
 
-data = LOAD 'data.csv' USING PigStorage(',') AS (
-    Id:int,
-    Name:chararray,
-    LastName:chararray,
-    Birth:chararray,
-    Color:chararray,
-    Value:int
-);
-color_table = FOREACH data GENERATE Color;
-variable = FILTER color_table BY Color MATCHES 'b.*';
-STORE variable INTO 'output' USING PigStorage(',');
+y = FOREACH u GENERATE color;
+z = FILTER y BY SUBSTRING($0,0,1) IN ('b'); 
+dump z; 
+store z into 'output';
