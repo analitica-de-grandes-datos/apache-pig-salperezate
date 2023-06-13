@@ -1,34 +1,14 @@
-/*
-Pregunta
-===========================================================================
+fs -rm -f -r output;
 
-Para responder la pregunta use el archivo `data.csv`.
+u = LOAD 'data.csv' USING PigStorage(',') 
+    AS (id:int, 
+        firstname:CHARARRAY, 
+        surname:CHARARRAY, 
+        birthday:CHARARRAY, 
+        color:CHARARRAY, 
+        quantity:INT);
 
-Escriba el código equivalente a la siguiente consulta SQL.
-
-   SELECT 
-       firstname, 
-       color 
-   FROM 
-       u
-   WHERE color NOT IN ('blue','black');
-
-Escriba el resultado a la carpeta `output` del directorio actual. Para la 
-evaluación, pig sera eejcutado ejecutado en modo local:
-
-$ pig -x local -f pregunta.pig
-
-        /* >>> Escriba su respuesta a partir de este punto <<< */
-*/
-
-data = LOAD 'data.csv' USING PigStorage(',') AS (
-    Id:int,
-    Name:chararray,
-    LastName:chararray,
-    Birth:chararray,
-    Color:chararray,
-    Value:int
-);
-s_data = FOREACH data GENERATE Name, Color;
-variable = FILTER s_data BY NOT Color IN ('blue','black');
-STORE variable INTO 'output' USING PigStorage(',');
+y = FOREACH u GENERATE firstname, color;
+z = FILTER y BY color != 'blue' AND color != 'black';
+dump z;
+store z into 'output' USING PigStorage(',');
