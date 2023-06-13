@@ -21,10 +21,14 @@ $ pig -x local -f pregunta.pig
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
 
-A = LOAD './data.csv' using PigStorage(',')
-     AS (num:int, name:chararray, LASTNAME:chararray, time:chararray, color:chararray, otre:int);
-B = FOREACH A GENERATE name, color;
-C = FILTER B BY NOT (color  MATCHES '.*b.*');
-DUMP B;
+ds18 = LOAD 'data.csv' USING PigStorage(',')
+        AS(col1:INT,
+           col2:charArray,
+           col3:charArray,
+           col4:charArray,
+           col5:charArray,
+           col6:INT);
 
-STORE C INTO 'output/' using PigStorage(',');
+ds18 = FOREACH ds18 GENERATE col2, col5;
+ds18 = FILTER ds18 BY NOT col5 IN ('blue','black');
+STORE ds18 INTO 'output' USING PigStorage(',');
